@@ -20,3 +20,11 @@
 
 Vertex shader sets gl_Position
 Fragment shader sets gl_FragColor
+
+# TODO
+- [ ] Render cube
+- [ ] Render multiple cubes (use zdepth)
+- [ ] Apply textures to the cube
+- [ ] Apply texture mapping
+- [ ] Load a obj file or any other simple 3d file formats
+- [ ] Create a image that is generated from a shader
