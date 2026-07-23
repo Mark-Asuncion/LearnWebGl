@@ -1,17 +1,11 @@
-"use strict"
-const Point3 = require("./point");
-class Vector3 extends Point3 {
-    /**
-     * @param {number} x
-     * @param {number} y
-     * @param {number} z
-     */
+import { Point3 } from "./point";
+
+export default class Vector3 extends Point3 {
     constructor(x = 0, y = 0, z = 1) {
         super(x, y, z);
     }
 
     length() {
-        // sqrt(x^2+y^2+z^2)
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     };
 
@@ -30,30 +24,15 @@ class Vector3 extends Point3 {
         return normalized;
     };
 
-    /**
-     * @param {Vector3} v1
-     * @param {Vector3} v2
-     * @returns {Vector3}
-     */
-    static add(v1, v2) {
+    static add(v1: Vector3, v2: Vector3): Vector3 {
         return new Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
     }
 
-    /**
-     * @param {Vector3} v1
-     * @param {Vector3} v2
-     * @returns {Vector3}
-     */
-    static subtract(v1, v2) {
+    static subtract(v1: Vector3, v2: Vector3): Vector3 {
         return new Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
     }
 
-    /**
-     * @param {Vector3} v1
-     * @param {Vector3} v2
-     * @returns {Vector3}
-     */
-    static cross_product(v1, v2) {
+    static cross_product(v1: Vector3, v2: Vector3): Vector3 {
         return new Vector3(
             v1.y * v2.z - v1.z * v2.y,
             v1.x * v2.z - v1.z * v2.x,
@@ -61,31 +40,15 @@ class Vector3 extends Point3 {
         );
     }
     
-    /**
-     * @param {Vector3} v1
-     * @param {Vector3} v2
-     * @returns {number}
-     */
-    static dot_product(v1, v2) {
+    static dot_product(v1: Vector3, v2: Vector3): number {
         return v1.x*v1.x+v1.y*v2.y+v1.z+v2.z;
     }
 
-    /**
-     * @param {import("./point")} tail
-     * @param {import("./point")} head
-     * @returns {Vector3}
-     */
-    static from(tail, head) {
+    static from(tail: Point3, head: Point3): Vector3 {
         return Vector3.subtract(Vector3.from_point(head), Vector3.from_point(tail));
     }
 
-    /**
-     * @param {import("./point")} point
-     * @returns {Vector3}
-     */
-    static from_point(point) {
+    static from_point(point: Point3) {
         return new Vector3(point.x, point.y, point.z);
     }
 }
-
-module.exports =  Vector3;

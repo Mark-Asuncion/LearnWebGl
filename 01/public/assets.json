@@ -1,0 +1,12 @@
+{
+    "default_vertex": {
+        "type": "VERTEX_SHADER",
+        "name": "default_vertex",
+        "value": "/shaders/vertex/default.vert"
+    },
+    "default_fragment": {
+        "type": "FRAGMENT_SHADER",
+        "name": "default_fragment",
+        "value": "/shaders/fragment/default.frag"
+    }
+}
