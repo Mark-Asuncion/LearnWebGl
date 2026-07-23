@@ -19,7 +19,7 @@ export default class Perspective extends Projection {
         const fovyRadians = this.fovy * Math.PI / 180;
         const f = 1/Math.tan(fovyRadians/2);
         const initMatrix = new Float32Array([
-            this.aspect_ratio/f, 0, 0, 0,
+            f/this.aspect_ratio, 0, 0, 0,
             0, f, 0, 0,
             0, 0, -(this.zfar+this.znear)/(this.zfar-this.znear), -(2*this.zfar*this.znear)/(this.zfar-this.znear),
             0, 0, -1, 0

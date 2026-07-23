@@ -49,14 +49,25 @@ export class Triangle extends Node {
         await default_shader.init();
         this.position.z = -5;
         this.vertices = [
-            new Point3(0, 1, 0),
-            new Point3(1, -1, 0),
-            new Point3(-1, -1, 0)
+            // by chatgpt cause im  lazy
+            // Triangle 1
+            new Point3(-1,  1, 0), // top-left
+            new Point3( 1,  1, 0), // top-right
+            new Point3( 1, -1, 0), // bottom-right
+
+            // Triangle 2
+            new Point3(-1,  1, 0), // top-left
+            new Point3( 1, -1, 0), // bottom-right
+            new Point3(-1, -1, 0)  // bottom-left
         ];
         this.attrib.colors = [
             new Point4(1, 0, 0, 1),
             new Point4(0, 1, 0, 1),
-            new Point4(0, 0, 1, 1)
+            new Point4(0, 0, 1, 1),
+
+            new Point4(1, 0, 0, 1),
+            new Point4(0, 0, 1, 1),
+            new Point4(0, 1, 0, 1)
         ];
         this.shader = default_shader;
         this.create_buffer();
@@ -74,7 +85,7 @@ export class Triangle extends Node {
         const program = this.shader.program;
 
         this.rotation.x += Engine.delta * 0.1;
-        this.rotation.y += Engine.delta * 0.1;
+        this.rotation.y -= Engine.delta * 0.1;
         this.rotation.z += Engine.delta * 0.1;
 
         gl.useProgram(program)
