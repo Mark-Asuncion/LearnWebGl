@@ -3,6 +3,7 @@ import Perspective from "../projection/perspective";
 import { Point3 } from "../point";
 import { Engine } from "../../engine";
 import { Triangle } from "../node/triangle";
+import { Square } from "../node/square";
 
 export class DefaultScene extends Scene {
     constructor() {
@@ -15,7 +16,15 @@ export class DefaultScene extends Scene {
         super.init();
         const triangle = new Triangle("triangle");
         await triangle.init();
-        this.nodes.push(triangle);
+
+        const square = new Square("triangle");
+        await square.init();
+
+        this.nodes.push(triangle, square);
+
+        Engine.gl.enable(Engine.gl.CULL_FACE);
+        Engine.gl.cullFace(Engine.gl.BACK);
+        Engine.gl.frontFace(Engine.gl.CW);
     }
 
     render() {

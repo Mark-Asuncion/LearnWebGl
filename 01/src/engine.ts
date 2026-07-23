@@ -1,5 +1,6 @@
 import type { Scene } from "./lib/scenes/base";
 import { DefaultScene } from "./lib/scenes/default";
+import type Shader from "./lib/shaders/base";
 import { load_asset_infos } from "./lib/utils/assets";
 
 export enum AssetInfoType {
@@ -21,8 +22,10 @@ export class Engine {
     static delta: number = 0.0;
     static cur_scene: Scene = null;
 
+    static shaders: Map<string, Shader> = new Map();
+
     static loop() {
-        Engine.delta = Date.now()-Engine.cur_time;
+        Engine.delta = (Date.now()-Engine.cur_time)/1000;
         Engine.cur_time = Date.now();
         Engine.cur_scene.render();
         requestAnimationFrame(Engine.loop);

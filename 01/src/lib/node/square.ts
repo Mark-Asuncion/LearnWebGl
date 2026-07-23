@@ -4,9 +4,7 @@ import { ShaderKey } from "../shaders/base";
 import { get_shader } from "../shaders/util";
 import { Node } from "./base";
 
-export class Triangle extends Node {
-    speed: number;
-    orig_pos: Point3;
+export class Square extends Node {
     constructor(name: string) {
         super(name);
     }
@@ -49,22 +47,31 @@ export class Triangle extends Node {
 
     async init() {
         const default_shader = await get_shader(ShaderKey.Default);
-        this.position.x = 2;
+        this.position.x = -2;
         this.position.z = -5;
         this.vertices = [
-            new Point3(0,  1, 0),
-            new Point3(1, -1, 0),
-            new Point3(-1, -1, 0),
+            // by chatgpt cause im  lazy
+            // Triangle 1
+            new Point3(-1,  1, 0), // top-left
+            new Point3( 1,  1, 0), // top-right
+            new Point3( 1, -1, 0), // bottom-right
+
+            // Triangle 2
+            new Point3(-1,  1, 0), // top-left
+            new Point3( 1, -1, 0), // bottom-right
+            new Point3(-1, -1, 0)  // bottom-left
         ];
         this.attrib.colors = [
             new Point4(1, 0, 0, 1),
             new Point4(0, 1, 0, 1),
-            new Point4(0, 0, 1, 1)
+            new Point4(0, 0, 1, 1),
+
+            new Point4(1, 0, 0, 1),
+            new Point4(0, 0, 1, 1),
+            new Point4(0, 1, 0, 1)
         ];
         this.shader = default_shader;
         this.create_buffer();
-        this.orig_pos = new Point3(this.position.x, this.position.y, this.position.z);
-        this.speed = 0.4;
         console.debug(this);
     }
 
@@ -78,17 +85,10 @@ export class Triangle extends Node {
         const gl = Engine.gl;
         const program = this.shader.program;
 
-        let rot_speed = 30;
+        let rot_speed = 60;
         this.rotation.x += Engine.delta * rot_speed;
         this.rotation.y -= Engine.delta * rot_speed;
         this.rotation.z += Engine.delta * rot_speed;
-        this.position.y += this.speed * Engine.delta;
-        if (this.position.y >= this.orig_pos.y+0.5) {
-            this.speed = -this.speed
-        }
-        else if (this.position.y <= this.orig_pos.y-1) {
-            this.speed = Math.abs(this.speed);
-        }
 
         gl.useProgram(program)
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);

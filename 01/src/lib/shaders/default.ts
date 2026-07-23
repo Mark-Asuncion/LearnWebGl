@@ -5,7 +5,7 @@ import Shader from "./base";
 
 export class DefaultShader extends Shader {
     constructor() {
-        super();
+        super("default_shader");
     }
     async init() {
         console.debug("Loading shaders...");

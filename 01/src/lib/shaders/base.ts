@@ -1,6 +1,12 @@
 export default class Shader {
     program: WebGLProgram;
-    constructor() {
+    name: string;
+    constructor(name: string) {
         this.program = null;
+        this.name = name;
     }
+}
+
+export enum ShaderKey {
+    Default = "Default"
 }
