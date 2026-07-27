@@ -22,7 +22,8 @@ Vertex shader sets gl_Position
 Fragment shader sets gl_FragColor
 
 # TODO
-- [ ] Render cube
+- [x] Render cube
+- [ ] Fix cube rendering with depth testing (when cull is disabled the front face is not shown because of drawing order)
 - [ ] Render multiple cubes (use zdepth)
 - [ ] Apply textures to the cube
 - [ ] Apply texture mapping

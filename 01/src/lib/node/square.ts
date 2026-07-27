@@ -3,6 +3,7 @@ import { Point3, Point4 } from "../point";
 import { ShaderKey } from "../shaders/base";
 import { get_shader } from "../shaders/util";
 import { Node } from "./base";
+import { create_buffer, set_vertices_data } from "../utils/gl";
 
 export class Square extends Node {
     constructor(name: string) {
@@ -26,23 +27,9 @@ export class Square extends Node {
         console.debug(`_create_buffer_data ${this.id}:${this.name}: `, f);
         this.stride = 7;
         this.buffer_data = new Float32Array(f);
-        return this.buffer_data;
-    }
-
-    create_buffer() {
         const gl = Engine.gl;
-        if (this.buffer) {
-            gl.deleteBuffer(this.buffer);
-            this.buffer = null;
-        }
-        const buffer = gl.createBuffer();
-        if (!buffer) {
-            console.error("Failed to create the buffer object for " + this.name);
-            throw Error("Failed to create the buffer object for " + this.name);
-        }
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this._create_buffer_data(), gl.STATIC_DRAW);
-        this.buffer = buffer;
+        if (!this.buffer) throw new Error("Buffer is null");
+        set_vertices_data(gl, this.buffer, this.buffer_data);
     }
 
     async init() {
@@ -71,47 +58,18 @@ export class Square extends Node {
             new Point4(0, 1, 0, 1)
         ];
         this.shader = default_shader;
-        this.create_buffer();
-        console.debug(this);
+        this.buffer = create_buffer(Engine.gl);
+        this._create_buffer_data();
     }
 
     render() {
         super.render();
-        if (!this.buffer) {
-            console.error(`Could not render ${this.id}:${this.name}`);
-            this.create_buffer();
-            return;
-        }
-        const gl = Engine.gl;
-        const program = this.shader.program;
 
         let rot_speed = 60;
         this.rotation.x += Engine.delta * rot_speed;
         this.rotation.y -= Engine.delta * rot_speed;
         this.rotation.z += Engine.delta * rot_speed;
 
-        gl.useProgram(program)
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-
-        const el_size = Float32Array.BYTES_PER_ELEMENT;
-        const _stride = this.stride*el_size;
-
-        let u_transform = gl.getUniformLocation(program, 'u_transform');
-        let u_rotation = gl.getUniformLocation(program, 'u_rotation');
-        let u_position = gl.getUniformLocation(program, 'u_position');
-        let a_vertex = gl.getAttribLocation(program, 'a_vertex');
-        let a_color = gl.getAttribLocation(program, 'a_color');
-
-        gl.uniformMatrix4fv(u_transform, false, Engine.cur_scene.projection.matrix());
-        gl.uniform3f(u_rotation, this.rotation.x, this.rotation.y, this.rotation.z);
-        gl.uniform3f(u_position, this.position.x, this.position.y, this.position.z);
-
-        gl.vertexAttribPointer(a_vertex, 3, gl.FLOAT, false, _stride, 0);
-        gl.vertexAttribPointer(a_color, 4, gl.FLOAT, false, _stride, 3*el_size);
-        gl.enableVertexAttribArray(a_vertex);
-        gl.enableVertexAttribArray(a_color);
-
-        gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length);
-        gl.drawArrays(gl.LINE_LOOP, 0,  this.vertices.length);
+        this.shader.render(this);
     }
 }

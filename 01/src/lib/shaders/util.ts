@@ -1,8 +1,8 @@
 import { Engine } from "../../engine";
-import { ShaderKey } from "./base";
+import Shader, { ShaderKey } from "./base";
 import { DefaultShader } from "./default";
 
-export async function get_shader(key: ShaderKey) {
+export async function get_shader(key: ShaderKey): Promise<Shader> {
     switch (key) {
         case ShaderKey.Default:
             if (Engine.shaders.has(key)) return Engine.shaders.get(key);

@@ -1,3 +1,5 @@
+import type { Renderable } from "../utils/types";
+
 export default class Shader {
     program: WebGLProgram;
     name: string;
@@ -5,6 +7,8 @@ export default class Shader {
         this.program = null;
         this.name = name;
     }
+
+    render(_ctx: Renderable) {}
 }
 
 export enum ShaderKey {

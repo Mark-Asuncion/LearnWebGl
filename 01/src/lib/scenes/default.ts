@@ -4,6 +4,7 @@ import { Point3 } from "../point";
 import { Engine } from "../../engine";
 import { Triangle } from "../node/triangle";
 import { Square } from "../node/square";
+import { Cube } from "../node/cube";
 
 export class DefaultScene extends Scene {
     constructor() {
@@ -17,10 +18,14 @@ export class DefaultScene extends Scene {
         const triangle = new Triangle("triangle");
         await triangle.init();
 
-        const square = new Square("triangle");
+        const square = new Square("square");
         await square.init();
 
-        this.nodes.push(triangle, square);
+        const cube = new Cube("cube");
+        await cube.init();
+
+        // this.nodes.push(triangle, square, cube);
+        this.nodes.push(cube);
 
         Engine.gl.enable(Engine.gl.CULL_FACE);
         Engine.gl.cullFace(Engine.gl.BACK);

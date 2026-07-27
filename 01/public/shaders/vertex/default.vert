@@ -1,6 +1,7 @@
 uniform mat4 u_transform;
 uniform vec3 u_position;
 uniform vec3 u_rotation;
+uniform vec3 u_scale;
 
 attribute vec3 a_vertex;
 attribute vec4 a_color;
@@ -41,6 +42,7 @@ void main() {
     );
 
     translation = translation * x_rotation * y_rotation * z_rotation;
-    gl_Position = u_transform * translation * vec4(a_vertex, 1.0);
+    vec4 scaled = vec4(a_vertex, 1) * vec4(u_scale, 1);
+    gl_Position = u_transform * translation * scaled;
     v_color = a_color;
 }
