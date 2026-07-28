@@ -34,7 +34,7 @@ export class Cube extends Node {
 
     async init() {
         const default_shader = await get_shader(ShaderKey.Default);
-        this.position.x = -2;
+        this.position.x = 0;
         this.position.z = -3;
         this.vertices = [
           // Front face
@@ -114,6 +114,7 @@ export class Cube extends Node {
             20, 22, 21,
             20, 23, 22,
         ];
+        this.position.z = -10;
         this.shader = default_shader;
         this.buffer = create_buffer(Engine.gl);
         this._create_buffer_data();
@@ -122,10 +123,13 @@ export class Cube extends Node {
     render() {
         super.render();
 
-        let rot_speed = 60;
+        let rot_speed = 30;
         this.rotation.x += Engine.delta * rot_speed;
         this.rotation.y += Engine.delta * rot_speed;
-        this.rotation.z += Engine.delta * rot_speed;
+        // this.rotation.z += Engine.delta * rot_speed;
+        this.rotation.x = this.rotation.x % 360;
+        this.rotation.y = this.rotation.y % 360;
+        // this.rotation.z = this.rotation.z % 360;
 
         this.shader.render(this);
     }

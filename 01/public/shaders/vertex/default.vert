@@ -28,21 +28,26 @@ void main() {
     );
 
     mat4 y_rotation = mat4(
-        cos(rotation_radians.y), 0, -sin(rotation_radians.y), 0,
+        cos(rotation_radians.y), 0, sin(rotation_radians.y), 0,
         0, 1, 0, 0,
         -sin(rotation_radians.y), 0, cos(rotation_radians.y), 0,
         0, 0, 0, 1
     );
 
     mat4 z_rotation = mat4(
-        cos(rotation_radians.z), sin(rotation_radians.z), 0, 0,
-        -sin(rotation_radians.z), cos(rotation_radians.z), 0, 0,
+        cos(rotation_radians.z), -sin(rotation_radians.z), 0, 0,
+        sin(rotation_radians.z), cos(rotation_radians.z), 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
     );
 
     translation = translation * x_rotation * y_rotation * z_rotation;
-    vec4 scaled = vec4(a_vertex, 1) * vec4(u_scale, 1);
-    gl_Position = u_transform * translation * scaled;
+    mat4 scale = mat4(
+        u_scale.x, 0, 0, 0,
+        0, u_scale.y, 0, 0,
+        0, 0, u_scale.z, 0,
+        0, 0, 0, 1
+    );
+    gl_Position = u_transform * translation * scale * vec4(a_vertex, 1);
     v_color = a_color;
 }

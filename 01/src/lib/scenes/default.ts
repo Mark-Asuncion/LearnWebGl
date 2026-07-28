@@ -5,12 +5,15 @@ import { Engine } from "../../engine";
 import { Triangle } from "../node/triangle";
 import { Square } from "../node/square";
 import { Cube } from "../node/cube";
+import Ortographic from "../projection/orthographic";
 
 export class DefaultScene extends Scene {
     constructor() {
         super("DefaultScene");
         const canvas_rect = new Point3(Engine.gl.canvas.width, Engine.gl.canvas.height, 0);
         this.projection = new Perspective(canvas_rect.x, canvas_rect.y, 90, 0.1, 100);
+        // const aspect_ratio = canvas_rect.x / canvas_rect.y;
+        // this.projection = new Ortographic(-aspect_ratio, aspect_ratio, 1, -1, -10, 10);
     }
 
     async init() {
@@ -24,8 +27,8 @@ export class DefaultScene extends Scene {
         const cube = new Cube("cube");
         await cube.init();
 
-        // this.nodes.push(triangle, square, cube);
-        this.nodes.push(cube);
+        this.nodes.push(triangle, square, cube);
+        // this.nodes.push(cube);
 
         Engine.gl.enable(Engine.gl.CULL_FACE);
         Engine.gl.cullFace(Engine.gl.BACK);
