@@ -129,12 +129,12 @@ export class Cube extends Node {
     render() {
         super.render();
 
-        let rot_speed = 30;
-        this.rotation.x += Engine.delta * rot_speed;
-        this.rotation.y += Engine.delta * rot_speed;
-        // this.rotation.z += Engine.delta * rot_speed;
-        this.rotation.x = this.rotation.x % 360;
-        this.rotation.y = this.rotation.y % 360;
+        // let rot_speed = 30;
+        // this.rotation.x += Engine.delta * rot_speed;
+        // this.rotation.y += Engine.delta * rot_speed;
+        // // this.rotation.z += Engine.delta * rot_speed;
+        // this.rotation.x = this.rotation.x % 360;
+        // this.rotation.y = this.rotation.y % 360;
         // this.rotation.z = this.rotation.z % 360;
 
         this.shader.render(this);
