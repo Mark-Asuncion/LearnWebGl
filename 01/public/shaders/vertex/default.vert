@@ -1,12 +1,13 @@
+#version 300 es
 uniform mat4 u_transform;
 uniform vec3 u_position;
 uniform vec3 u_rotation;
 uniform vec3 u_scale;
 
-attribute vec3 a_vertex;
-attribute vec4 a_color;
+in vec3 a_vertex;
+in vec4 a_color;
 
-varying vec4 v_color;
+out vec4 v_color;
 
 void main() {
     mat4 translation = mat4(
