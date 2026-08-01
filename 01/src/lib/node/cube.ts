@@ -3,7 +3,7 @@ import { Point3, Point4 } from "../point";
 import { ShaderKey } from "../shaders/base";
 import { get_shader } from "../shaders/util";
 import { Node } from "./base";
-import { create_buffer, set_vertices_data } from "../utils/gl";
+import { create_buffer, set_face_data, set_vertices_data } from "../utils/gl";
 
 export class Cube extends Node {
     constructor(name: string) {
@@ -89,7 +89,7 @@ export class Cube extends Node {
           this.attrib.colors.push(cc, cc, cc, cc);
         }
 
-        this.attrib.index = [
+        this.attrib.index = new Uint16Array([
             // Front face
              0,  2,  1,
              0,  3,  2,
@@ -113,11 +113,17 @@ export class Cube extends Node {
             // Left face
             20, 22, 21,
             20, 23, 22,
-        ];
+        ]);
         this.position.z = -10;
         this.shader = default_shader;
         this.buffer = create_buffer(Engine.gl);
         this._create_buffer_data();
+        this.attrib.index_buffer = create_buffer(Engine.gl);
+        set_face_data(
+            Engine.gl,
+            this.attrib.index_buffer,
+            this.attrib.index
+        );
     }
 
     render() {

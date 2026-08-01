@@ -3,7 +3,7 @@ import { Point3, Point4 } from "../point";
 import { ShaderKey } from "../shaders/base";
 import { get_shader } from "../shaders/util";
 import { Node } from "./base";
-import { create_buffer, set_vertices_data } from "../utils/gl";
+import { create_buffer, set_face_data, set_vertices_data } from "../utils/gl";
 
 export class Square extends Node {
     constructor(name: string) {
@@ -57,9 +57,15 @@ export class Square extends Node {
             new Point4(0, 0, 1, 1),
             new Point4(0, 1, 0, 1)
         ];
+        this.attrib.index = new Uint16Array([
+            0, 1, 2,
+            3, 4, 5
+        ]);
         this.shader = default_shader;
         this.buffer = create_buffer(Engine.gl);
         this._create_buffer_data();
+        this.attrib.index_buffer = create_buffer(Engine.gl)
+        set_face_data(Engine.gl, this.attrib.index_buffer, this.attrib.index);
     }
 
     render() {

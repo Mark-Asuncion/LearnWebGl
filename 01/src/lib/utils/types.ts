@@ -16,12 +16,12 @@ export interface Renderable {
 
 export class VertexAttributes {
     colors: Point4[];
-    index:number[];
+    index:Uint16Array;
     index_buffer?: WebGLBuffer;
 
     constructor() {
         this.colors = [];
-        this.index = [];
+        this.index = new Uint16Array();
     }
 }
 

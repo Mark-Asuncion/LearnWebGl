@@ -60,19 +60,9 @@ export class DefaultShader extends Shader {
     render(node: Renderable) {
         const gl = Engine.gl;
 
-        if (node.attrib.index != null && node.attrib.index.length > 0) {
-            const _indexes = new Uint16Array(node.attrib.index);
-            if (!node.attrib.index_buffer) {
-                node.attrib.index_buffer = create_buffer(Engine.gl);
-                set_face_data(gl, node.attrib.index_buffer, _indexes);
-            }
-            else {
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, node.attrib.index_buffer);
-            }
-        }
-
         gl.useProgram(this.program)
         gl.bindBuffer(gl.ARRAY_BUFFER, node.buffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, node.attrib.index_buffer);
 
         const el_size = Float32Array.BYTES_PER_ELEMENT;
         const _stride = node.stride*el_size;
@@ -87,14 +77,7 @@ export class DefaultShader extends Shader {
         gl.enableVertexAttribArray(this._params.a_vertex);
         gl.enableVertexAttribArray(this._params.a_color);
 
-        if (node.attrib.index != null && node.attrib.index.length > 0) {
-            gl.drawElements(gl.TRIANGLES, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
-            // gl.drawElements(gl.LINE_LOOP, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
-        }
-        else {
-            gl.drawArrays(gl.TRIANGLES, 0, node.vertices.length);
-            gl.drawArrays(gl.LINE_LOOP, 0,  node.vertices.length);
-        }
-
+        // gl.drawElements(gl.LINE_LOOP, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
     }
 }
