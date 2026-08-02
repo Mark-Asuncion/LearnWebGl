@@ -5,9 +5,10 @@ import { Engine } from "../../engine";
 import { Triangle } from "../node/triangle";
 import { Square } from "../node/square";
 import { Cube } from "../node/cube";
-import Ortographic from "../projection/orthographic";
+import { Gizmo } from "../node/gizmo";
 
 export class DefaultScene extends Scene {
+    gizmo: Gizmo;
     constructor() {
         super("DefaultScene");
         const canvas_rect = new Point3(Engine.gl.canvas.width, Engine.gl.canvas.height, 0);
@@ -30,6 +31,10 @@ export class DefaultScene extends Scene {
         await cube2.init();
         const cube3 = new Cube("cube2");
         await cube3.init();
+
+        const gizmo = new Gizmo("Gizmo");
+        await gizmo.init();
+        this.gizmo = gizmo;
 
         // Closest (should appear in front)
         cube.position.x = 0;
@@ -56,7 +61,8 @@ export class DefaultScene extends Scene {
         cube3.rotation.x = 175;
 
         // this.nodes.push(triangle, square, cube);
-        this.nodes.push(cube, cube2, cube3);
+        // this.nodes.push(cube, cube2, cube3);
+        this.nodes.push(cube, gizmo);
 
         Engine.gl.enable(Engine.gl.CULL_FACE);
         Engine.gl.cullFace(Engine.gl.BACK);
@@ -71,6 +77,14 @@ export class DefaultScene extends Scene {
         super.render();
         Engine.gl.clearColor(0.1, 0.1, 0.1, 1.0);
         Engine.gl.clear(Engine.gl.COLOR_BUFFER_BIT | Engine.gl.DEPTH_BUFFER_BIT);
+
+        this.gizmo.position = new Point3(
+            this.nodes[0].pivot.x,
+            this.nodes[0].pivot.y,
+            this.nodes[0].position.z
+        );
+        // this.gizmo.rotation = this.nodes[0].rotation;
+        // this.gizmo.pivot = this.nodes[0].pivot;
 
         this.nodes.forEach(el => {
             el.render();

@@ -11,7 +11,7 @@ export class Node implements Renderable {
     stride: number;
     attrib: VertexAttributes;
 
-    origin: Point3;
+    pivot: Point3;
     position: Point3;
     rotation: Point3;
     scale: Point3
@@ -25,7 +25,7 @@ export class Node implements Renderable {
         this.id = crypto.randomUUID();
         this.name = name;
         this.parent = null;
-        this.origin = new Point3(0,0,0);
+        this.pivot = new Point3(0,0,0);
         this.position = new Point3(0,0,0);
         this.rotation = new Point3(0,0,0);
         this.scale = new  Point3(1,1,1);

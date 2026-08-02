@@ -1,7 +1,7 @@
 import type { Point3, Point4 } from "../point";
 
 export interface Renderable {
-    origin: Point3;
+    pivot: Point3;
     vertices: Point3[];
     stride: number;
     attrib: VertexAttributes;

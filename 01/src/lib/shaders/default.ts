@@ -1,10 +1,11 @@
 import { Engine } from "../../engine";
 import { load_asset_as_string } from "../utils/assets";
-import { create_buffer, create_shader, set_face_data } from "../utils/gl";
+import { create_shader } from "../utils/gl";
 import type { Renderable } from "../utils/types";
 import Shader from "./base";
 
 export type _DefaultShaderParams = {
+    u_pivot: WebGLUniformLocation,
     u_transform: WebGLUniformLocation,
     u_rotation: WebGLUniformLocation,
     u_position: WebGLUniformLocation,
@@ -48,12 +49,13 @@ export class DefaultShader extends Shader {
 
         const gl = Engine.gl;
         this._params = {
-            u_transform: gl.getUniformLocation(program, 'u_transform'),
-            u_rotation: gl.getUniformLocation(program, 'u_rotation'),
-            u_position: gl.getUniformLocation(program, 'u_position'),
-            u_scale: gl.getUniformLocation(program, 'u_scale'),
-            a_vertex: gl.getAttribLocation(program, 'a_vertex'),
-            a_color: gl.getAttribLocation(program, 'a_color')
+            u_pivot: gl.getUniformLocation(program, "u_pivot"),
+            u_transform: gl.getUniformLocation(program, "u_transform"),
+            u_rotation: gl.getUniformLocation(program, "u_rotation"),
+            u_position: gl.getUniformLocation(program, "u_position"),
+            u_scale: gl.getUniformLocation(program, "u_scale"),
+            a_vertex: gl.getAttribLocation(program, "a_vertex"),
+            a_color: gl.getAttribLocation(program, "a_color")
         }
     }
 
@@ -68,6 +70,7 @@ export class DefaultShader extends Shader {
         const _stride = node.stride*el_size;
 
         gl.uniformMatrix4fv(this._params.u_transform, false, Engine.cur_scene.projection.matrix());
+        gl.uniform3f(this._params.u_pivot, node.pivot.x, node.pivot.y, node.pivot.z);
         gl.uniform3f(this._params.u_rotation, node.rotation.x, node.rotation.y, node.rotation.z);
         gl.uniform3f(this._params.u_position, node.position.x, node.position.y, node.position.z);
         gl.uniform3f(this._params.u_scale, node.scale.x, node.scale.y, node.scale.z);
@@ -79,5 +82,6 @@ export class DefaultShader extends Shader {
 
         // gl.drawElements(gl.LINE_LOOP, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
         gl.drawElements(gl.TRIANGLES, node.attrib.index.length, gl.UNSIGNED_SHORT, 0);
+        // gl.drawElements(gl.POINTS, node.attrib.index.length, gl.UNSIGNED_SHORT, 0)
     }
 }

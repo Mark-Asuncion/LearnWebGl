@@ -1,4 +1,5 @@
 #version 300 es
+uniform vec3 u_pivot;
 uniform mat4 u_transform;
 uniform vec3 u_position;
 uniform vec3 u_rotation;
@@ -10,14 +11,25 @@ in vec4 a_color;
 out vec4 v_color;
 
 void main() {
-    mat4 translation = mat4(
+    mat4 transformation = mat4(
         1.0, 0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        u_position.x,
-        u_position.y,
-        u_position.z,
-        1.0
+        u_position.x, u_position.y, u_position.z, 1.0
+    );
+
+    mat4 pivot = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        u_pivot.x, u_pivot.y, u_pivot.z, 1.0
+    );
+
+    mat4 inv_pivot = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        -u_pivot.x, -u_pivot.y, -u_pivot.z, 1.0
     );
 
     vec4 rotation_radians = vec4(radians(u_rotation), 1);
@@ -42,13 +54,18 @@ void main() {
         0, 0, 0, 1
     );
 
-    translation = translation * x_rotation * y_rotation * z_rotation;
     mat4 scale = mat4(
         u_scale.x, 0, 0, 0,
         0, u_scale.y, 0, 0,
         0, 0, u_scale.z, 0,
         0, 0, 0, 1
     );
-    gl_Position = u_transform * translation * scale * vec4(a_vertex, 1);
+
+    transformation = transformation * pivot;
+    transformation = transformation *
+        x_rotation * y_rotation * z_rotation *
+        scale * inv_pivot;
+
+    gl_Position = u_transform * transformation * vec4(a_vertex, 1);
     v_color = a_color;
 }
